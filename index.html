@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#2563EB" />
+  <meta name="description" content="RoadTo600: TOEFL ITP & Fluency Mastery — Mobile-first Progressive Web App to jump from 497 (Intermediate) to 600+ (Advanced)." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="RoadTo600" />
+  <title>RoadTo600: TOEFL ITP &amp; Fluency Mastery</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- PWA Manifest & Icon -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icons/icon.svg" />
+  <link rel="apple-touch-icon" href="./icons/icon.svg" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+
+    <!-- ====================================================================
+         RESPONSIVE LEFT SIDEBAR (Desktop >= 768px)
+         ==================================================================== -->
+    <aside class="desktop-sidebar" aria-label="Desktop Navigation">
+      <div>
+        <div class="brand-block">
+          <div class="brand-logo" aria-hidden="true">600+</div>
+          <div>
+            <div class="brand-title">RoadTo600</div>
+            <div class="brand-subtitle">TOEFL ITP &amp; Fluency PWA</div>
+          </div>
+        </div>
+
+        <nav class="sidebar-nav" role="navigation">
+          <button class="sidebar-nav-btn active" data-nav-tab="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+            <span class="sidebar-nav-badge" id="sidebar-score-badge">497→600</span>
+          </button>
+
+          <button class="sidebar-nav-btn" data-nav-tab="drills">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+            <span>Drills</span>
+            <span class="sidebar-nav-badge">60 Skills</span>
+          </button>
+
+          <button class="sidebar-nav-btn" data-nav-tab="simulasi">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Simulasi</span>
+            <span class="sidebar-nav-badge">ITP Timed</span>
+          </button>
+
+          <button class="sidebar-nav-btn" data-nav-tab="fluency">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            <span>Fluency</span>
+            <span class="sidebar-nav-badge">Shadowing</span>
+          </button>
+
+          <button class="sidebar-nav-btn" data-nav-tab="review">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Review</span>
+            <span class="sidebar-nav-badge" id="sidebar-review-count">0</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-row">
+          <span>Daily Streak</span>
+          <span id="sidebar-streak-label">🔥 1 Day</span>
+        </div>
+        <div class="sidebar-footer-sub">
+          Baseline <strong>497</strong> (B1) → Target <strong>600+</strong> (C1 Advanced) via 45-min daily blocks.
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         MOBILE COMPACT HEADER (< 768px)
+         ==================================================================== -->
+    <header class="mobile-topbar">
+      <div class="mobile-topbar-left">
+        <div class="brand-logo" style="width: 34px; height: 34px; font-size: 0.8rem; border-radius: 9px;">600+</div>
+        <div>
+          <div class="brand-title" style="font-size: 0.95rem;">RoadTo600</div>
+          <div class="brand-subtitle" style="font-size: 0.68rem;">TOEFL ITP &amp; Fluency</div>
+        </div>
+      </div>
+      <div class="mobile-topbar-pills">
+        <div class="streak-pill" id="mobile-streak-pill" title="Daily Habit Streak">🔥 <span id="mobile-streak-val">1</span>d</div>
+        <div class="score-pill" title="Current Estimated TOEFL ITP Score">Est: <span id="mobile-est-score">497</span></div>
+        <button type="button" class="gear-settings-btn" data-open-settings title="AI Infinite Question Generator Settings">
+          ⚙️
+        </button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         MAIN WORKSPACE
+         ==================================================================== -->
+    <main class="main-workspace">
+
+      <!-- Top Right Desktop Utility Bar with Gear Icon -->
+      <div class="desktop-top-utility-bar">
+        <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted);" id="desktop-ai-focus-badge">
+          🎯 Focus: Mastery 550 to 600+ (Hard Traps)
+        </span>
+        <button type="button" class="gear-settings-btn" data-open-settings id="desktop-gear-btn" title="Configure Gemini API Key & Difficulty Focus">
+          ⚙️ AI Generator Settings
+        </button>
+      </div>
+
+      <!-- ==================================================================
+           TAB 1: HOME DASHBOARD & OFFICIAL SCORE CALCULATOR (MODULE 1)
+           ================================================================== -->
+      <section id="view-home" class="tab-view active" aria-label="Home Dashboard">
+
+        <!-- 1. SCORE TRAJECTORY HEADER -->
+        <div class="trajectory-card">
+          <div class="trajectory-top-bar">
+            <div>
+              <span class="section-eyebrow">Module 1 • Score Trajectory Header</span>
+              <h1 class="card-title" style="font-size: 1.32rem;">Road to 600+ Mastery Dashboard</h1>
+            </div>
+            <div class="persona-tag">
+              <span>🎓 B1 Intermediate (497) → C1 Advanced (600+)</span>
+            </div>
+          </div>
+
+          <div class="trajectory-metrics-grid" role="region" aria-label="Score Trajectory Metrics">
+            <div class="metric-box">
+              <div class="metric-label">Baseline</div>
+              <div class="metric-value" id="header-baseline-score">497</div>
+              <span class="metric-cefr">CEFR B1 • Starting Point</span>
+            </div>
+
+            <div class="metric-box current-highlight" id="current-score-card">
+              <div class="metric-label">Current Estimated</div>
+              <div class="metric-value" id="header-current-score">497</div>
+              <span class="metric-cefr" id="header-current-breakdown">L:50 • S:49 • R:50</span>
+            </div>
+
+            <div class="metric-box target-highlight">
+              <div class="metric-label">Target Goal</div>
+              <div class="metric-value" id="header-target-score">600</div>
+              <span class="metric-cefr">CEFR C1 • Advanced</span>
+            </div>
+          </div>
+
+          <div class="trajectory-progress-wrapper">
+            <div class="trajectory-progress-labels">
+              <span id="trajectory-gain-text">+0 pts gained from 497 baseline</span>
+              <span class="points-remaining-badge" id="points-left-badge">103 points left to 600</span>
+            </div>
+            <div class="progress-track" role="progressbar" aria-valuemin="497" aria-valuemax="600" aria-valuenow="497" id="trajectory-progressbar">
+              <div class="progress-fill" id="trajectory-progress-fill" style="width: 4%;"></div>
+            </div>
+            <div class="trajectory-milestones">
+              <span>497 (Baseline)</span>
+              <span>525 (B1+)</span>
+              <span>550 (B2 Cutoff)</span>
+              <span>577 (High B2)</span>
+              <span>600+ (C1 Goal)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. INTERACTIVE TOEFL ITP SCORE CONVERTER & ESTIMATOR -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="section-eyebrow">Official ETS Formula Simulator</span>
+              <h2 class="card-title">Interactive TOEFL ITP Score Converter &amp; Estimator</h2>
+              <p class="card-subtitle">
+                Drag the section sliders or pick a strategy blueprint to see how many raw correct answers you need to hit <strong>600+</strong>.
+              </p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-sync-estimate" title="Save simulated score as your Current Estimated Score">
+              📌 Set as My Current Estimate
+            </button>
+          </div>
+
+          <div class="preset-row" id="score-presets-container" aria-label="Score Blueprint Presets"></div>
+
+          <div class="calculator-layout">
+            <div class="sliders-stack">
+              <!-- Section 1: Listening (0-50 -> 31-68) -->
+              <div class="section-slider-card">
+                <div class="slider-header-row">
+                  <div>
+                    <div class="slider-section-title">Section 1: Listening Comprehension</div>
+                    <div class="slider-section-meta">50 Questions • 35 Minutes • Scaled 31–68</div>
+                  </div>
+                  <div class="slider-score-badges">
+                    <span class="raw-pill">Raw: <span id="val-raw-l">43</span>/50</span>
+                    <span class="scaled-pill">Scaled: [<span id="val-scaled-l">59</span>]</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-listening" class="itp-range-slider" min="0" max="50" step="1" value="43" aria-label="Section 1 Listening Raw Correct Answers (0 to 50)" />
+                <div class="slider-scale-ticks">
+                  <span>0 (31)</span>
+                  <span>29 (50 Baseline)</span>
+                  <span>43 (59 Target)</span>
+                  <span>50 (68 Max)</span>
+                </div>
+              </div>
+
+              <!-- Section 2: Structure & Written Expression (0-40 -> 31-68) -->
+              <div class="section-slider-card">
+                <div class="slider-header-row">
+                  <div>
+                    <div class="slider-section-title">Section 2: Structure &amp; Written Expression</div>
+                    <div class="slider-section-meta">40 Questions • 25 Minutes • Scaled 31–68</div>
+                  </div>
+                  <div class="slider-score-badges">
+                    <span class="raw-pill">Raw: <span id="val-raw-s">36</span>/40</span>
+                    <span class="scaled-pill">Scaled: [<span id="val-scaled-s">61</span>]</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-structure" class="itp-range-slider" min="0" max="40" step="1" value="36" aria-label="Section 2 Structure Raw Correct Answers (0 to 40)" />
+                <div class="slider-scale-ticks">
+                  <span>0 (31)</span>
+                  <span>25 (49 Baseline)</span>
+                  <span>36 (61 Target)</span>
+                  <span>40 (68 Max)</span>
+                </div>
+              </div>
+
+              <!-- Section 3: Reading Comprehension (0-50 -> 31-67) -->
+              <div class="section-slider-card">
+                <div class="slider-header-row">
+                  <div>
+                    <div class="slider-section-title">Section 3: Reading Comprehension</div>
+                    <div class="slider-section-meta">50 Questions • 55 Minutes • Scaled 31–67</div>
+                  </div>
+                  <div class="slider-score-badges">
+                    <span class="raw-pill">Raw: <span id="val-raw-r">44</span>/50</span>
+                    <span class="scaled-pill">Scaled: [<span id="val-scaled-r">60</span>]</span>
+                  </div>
+                </div>
+                <input type="range" id="slider-reading" class="itp-range-slider" min="0" max="50" step="1" value="44" aria-label="Section 3 Reading Raw Correct Answers (0 to 50)" />
+                <div class="slider-scale-ticks">
+                  <span>0 (31)</span>
+                  <span>32 (50 Baseline)</span>
+                  <span>44 (60 Target)</span>
+                  <span>50 (67 Max)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="calculator-result-panel">
+              <div>
+                <div class="calc-simulated-label">Simulated TOEFL ITP Score</div>
+                <div class="calc-big-score-wrap">
+                  <div class="calc-big-score hit-600" id="sim-total-score">600</div>
+                  <div class="calc-summary-equation" id="sim-equation-line">
+                    L: 43/50 [59] • S: 36/40 [61] • R: 44/50 [60] &rArr; Total: 600
+                  </div>
+                </div>
+              </div>
+
+              <div class="calc-formula-pill" id="sim-formula-math">
+                Math.round(((59 + 61 + 60) * 10) / 3) = 600
+              </div>
+
+              <div class="calc-status-banner success" id="sim-target-advice">
+                ✅ Target 600 Achieved! You allow only 7 misses in Listening, 4 in Structure, and 6 in Reading.
+              </div>
+
+              <button type="button" class="btn btn-emerald" id="btn-apply-to-dashboard" style="width: 100%;">
+                Update Trajectory Header with This Score
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. DAILY 45-MINUTE HABIT TRACKER -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="section-eyebrow">Consistency Engine • Stored in localStorage</span>
+              <h2 class="card-title">Daily 45-Minute Habit Tracker</h2>
+              <p class="card-subtitle">
+                Complete all three 15-minute high-yield blocks daily to lock in your streak and compound +103 points.
+              </p>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-reset-today-habits">
+              Reset Today
+            </button>
+          </div>
+
+          <div class="habit-streak-header">
+            <div class="streak-counter-box">
+              <div class="streak-flame-icon" aria-hidden="true">🔥</div>
+              <div>
+                <div class="streak-count-title"><span id="habit-streak-days">1</span>-Day Study Streak</div>
+                <div class="streak-count-sub" id="habit-date-display">Today’s 45-Min Protocol</div>
+              </div>
+            </div>
+            <div class="habit-progress-ring-pill" id="habit-completion-summary">
+              0 / 3 Completed (0 / 45 mins)
+            </div>
+          </div>
+
+          <div class="habit-list" id="daily-habit-list" role="group" aria-label="Daily 45-Minute Checklist"></div>
+
+          <div class="focus-timer-banner" id="habit-timer-banner">
+            <div>
+              <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--accent-blue);" id="timer-active-label">
+                ⏱️ 15-Minute Deep Focus Timer
+              </div>
+              <div style="font-size: 0.83rem; color: var(--text-secondary);" id="timer-active-sub">
+                Select "Start 15m Timer" on any habit above or launch directly.
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="timer-countdown" id="timer-display">15:00</span>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-timer-toggle">Start</button>
+              <button type="button" class="btn btn-outline btn-sm" id="btn-timer-reset">Reset</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================================================================
+           TAB 2: DRILLS (LONGMAN 60-SKILLS LAB & ACADEMIC READING + AWL)
+           ================================================================== -->
+      <section id="view-drills" class="tab-view" aria-label="Structure and Reading Drills">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="section-eyebrow">Module 2 • Longman 60-Skills Standard &amp; AWL Lab</span>
+              <h1 class="card-title">Structure &amp; Written Expression + Academic Reading</h1>
+              <p class="card-subtitle">
+                Practice Part A (Sentence Completion) &amp; interactive Part B (Error Recognition), or switch to numbered-line Reading with Tap-to-Save AWL Vocabulary.
+              </p>
+            </div>
+            <div class="subtab-switcher" role="tablist">
+              <button type="button" class="subtab-btn active" data-drill-mode="structure">Section 2: Structure &amp; Written Exp.</button>
+              <button type="button" class="subtab-btn" data-drill-mode="reading">Section 3: Reading &amp; AWL Vocab</button>
+            </div>
+          </div>
+
+          <!-- ==============================================================
+               SUBVIEW A: STRUCTURE & WRITTEN EXPRESSION LAB (LONGMAN 60 SKILLS)
+               ============================================================== -->
+          <div id="drill-structure-pane">
+            <!-- AI Infinite Question Generator Bar (Structure) -->
+            <div class="ai-generator-bar">
+              <div class="ai-generator-info">
+                <div class="ai-generator-title">
+                  <span>✨ AI Infinite Structure &amp; Written Expression Generator</span>
+                </div>
+                <div class="ai-generator-sub" id="ai-str-weakness-hint">
+                  Powered by Gemini 2.5 Flash • Tailored to your weakest skills in <code>error_log</code>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-ai-generate btn-sm" id="btn-generate-structure-drill">
+                  ✨ Generate New Daily Drill (5 Qs)
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" data-open-settings title="Configure Gemini API Key">
+                  ⚙️ API Key
+                </button>
+              </div>
+            </div>
+            <div class="ai-error-alert" id="ai-str-error-alert"></div>
+
+            <!-- Quick Question Selector Pills -->
+            <div class="preset-row" id="str-question-pills" aria-label="Jump to Structure Question"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span class="scaled-pill" id="str-section-badge">Structure Part A</span>
+                <span class="raw-pill" id="str-skill-badge">Skill 15: Inversion with Negative Expressions</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-secondary);" id="str-progress-counter">
+                  Question 1 of 6
+                </span>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-str-retry-current" title="Clear answer for this question">
+                  ↺ Reset Question
+                </button>
+              </div>
+            </div>
+
+            <!-- Interactive Part B Instruction Banner (Shown on Part B Error Recognition) -->
+            <div id="str-part-b-hint" class="part-b-hint-banner" style="display: none;">
+              <span>👆 <strong>Part B Interactive Mode:</strong> Tap any underlined segment <strong>[A]</strong>, <strong>[B]</strong>, <strong>[C]</strong>, or <strong>[D]</strong> directly inside the sentence below, or choose an option button!</span>
+            </div>
+
+            <!-- Question Sentence Box -->
+            <div class="question-prompt-box" id="str-question-prompt"></div>
+
+            <!-- 4 Multiple Choice Buttons (A, B, C, D) -->
+            <div class="options-grid" id="str-options-container"></div>
+
+            <!-- Instant Diagnostic Breakdown Card -->
+            <div id="str-feedback-box"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; flex-wrap: wrap; gap: 10px;">
+              <button type="button" class="btn btn-outline" id="btn-str-prev">&larr; Previous Question</button>
+              <button type="button" class="btn btn-emerald" id="btn-complete-structure-habit">
+                ✓ Mark "Structure 15m Habit" Done
+              </button>
+              <button type="button" class="btn btn-primary" id="btn-str-next">Next Question &rarr;</button>
+            </div>
+          </div>
+
+          <!-- ==============================================================
+               SUBVIEW B: ACADEMIC READING & AWL VOCABULARY MODULE
+               ============================================================== -->
+          <div id="drill-reading-pane" style="display: none;">
+            <!-- AI Infinite Question Generator Bar (Reading) -->
+            <div class="ai-generator-bar">
+              <div class="ai-generator-info">
+                <div class="ai-generator-title">
+                  <span>✨ AI Infinite Academic Reading &amp; AWL Generator</span>
+                </div>
+                <div class="ai-generator-sub" id="ai-read-weakness-hint">
+                  Generates a new numbered-line academic passage + 5 AWL words + 5 comprehension questions
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-ai-generate btn-sm" id="btn-generate-reading-drill">
+                  ✨ Generate New Daily Drill (5 Qs)
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" data-open-settings title="Configure Gemini API Key">
+                  ⚙️ API Key
+                </button>
+              </div>
+            </div>
+            <div class="ai-error-alert" id="ai-read-error-alert"></div>
+
+            <!-- Top Bar: Passage Switcher & Mobile/Desktop View Toggle -->
+            <div class="reading-view-controls">
+              <div>
+                <h3 class="card-title" id="read-passage-title" style="font-size: 1.06rem;"></h3>
+                <p class="card-subtitle" id="read-passage-meta" style="font-size: 0.78rem;"></p>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <!-- View Mode Toggle: Passage View | Questions View | Split View -->
+                <div class="subtab-switcher" style="margin-bottom: 0;">
+                  <button type="button" class="subtab-btn" data-reading-layout="passage">📖 Passage View</button>
+                  <button type="button" class="subtab-btn" data-reading-layout="questions">❓ Questions View</button>
+                  <button type="button" class="subtab-btn active" data-reading-layout="split">⚡ Split View</button>
+                </div>
+
+                <button type="button" class="btn btn-outline btn-sm" id="btn-switch-passage">Switch Passage (1/2)</button>
+                <button type="button" class="btn btn-emerald btn-sm" id="btn-complete-reading-habit">✓ Complete Reading Habit</button>
+              </div>
+            </div>
+
+            <!-- Responsive Split / Toggle Workspace -->
+            <div class="reading-workspace-grid mode-split" id="reading-workspace-grid">
+
+              <!-- Left Column: Numbered-Line Passage + Tap-to-Save AWL Vocabulary -->
+              <div class="reading-left-col">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="section-eyebrow" style="margin-bottom: 0;">Numbered Lines Passage (Tap blue AWL word to inspect)</span>
+                </div>
+
+                <article class="numbered-passage-box" id="read-passage-content"></article>
+
+                <!-- Tap-to-Save Vocabulary List -->
+                <div style="margin-top: 16px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span class="section-eyebrow" style="margin-bottom: 0;">Tap-to-Save Academic Word List (AWL) Vocabulary</span>
+                    <button type="button" class="btn btn-outline btn-sm" id="btn-save-all-awl">
+                      + Save All 5 AWL Words to Deck
+                    </button>
+                  </div>
+                  <div class="awl-grid" id="read-awl-grid"></div>
+                </div>
+              </div>
+
+              <!-- Right Column: Comprehension Questions -->
+              <div class="reading-right-col">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <span class="section-eyebrow" style="margin-bottom: 0;">TOEFL ITP Section 3 Questions</span>
+                </div>
+                <div id="read-questions-list"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 3: SIMULASI (TIMED MINI & FULL SIMULATION MODE)
+           ================================================================== -->
+      <section id="view-simulasi" class="tab-view" aria-label="TOEFL ITP Timed Simulation">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="section-eyebrow">Module 3 • Strict TOEFL Pacing &amp; Score Recalibration</span>
+              <h1 class="card-title">Timed Mini &amp; Full Simulation Mode</h1>
+              <p class="card-subtitle">
+                Choose <strong>Quick 15-Min Diagnostic Sprint</strong> (15 questions • strict 35s Structure / 55s Reading pacing) or <strong>Full Section Timed Mode</strong>. Automatically updates your Home Estimated Score upon completion.
+              </p>
+            </div>
+            <div class="subtab-switcher" role="tablist" style="margin-bottom: 0;">
+              <button type="button" class="subtab-btn active" data-sim-mode="sprint15">
+                ⚡ Quick 15-Min Diagnostic Sprint (15 Qs)
+              </button>
+              <button type="button" class="subtab-btn" data-sim-mode="fullsection">
+                🏛️ Full Section Timed Mode
+              </button>
+            </div>
+          </div>
+
+          <div id="simulasi-active-container"></div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 4: FLUENCY (LISTENING SIMULATOR + ACTIVE SHADOWING COACH)
+           ================================================================== -->
+      <section id="view-fluency" class="tab-view" aria-label="Fluency and Listening Studio">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="section-eyebrow">Module 4 • Web Speech API Studio (TTS + SpeechRecognition)</span>
+              <h1 class="card-title">Fluency &amp; Listening Studio</h1>
+              <p class="card-subtitle">
+                Part 1 trains hidden-transcript TOEFL Listening (Part A Short Dialogues &amp; Part C Lectures). Part 2 uses real-time speech recognition to highlight words in green, compute Pronunciation Match %, and track WPM.
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <div class="subtab-switcher" role="tablist" style="margin-bottom: 0;">
+                <button type="button" class="subtab-btn active" data-fluency-tab="listening">
+                  🎧 Part 1: TOEFL Listening Simulator
+                </button>
+                <button type="button" class="subtab-btn" data-fluency-tab="shadowing">
+                  🎙️ Part 2: Active Shadowing &amp; WPM Coach
+                </button>
+              </div>
+              <button type="button" class="btn btn-emerald btn-sm" id="btn-complete-fluency-habit">
+                ✓ Mark Fluency Habit Done
+              </button>
+            </div>
+          </div>
+
+          <!-- Part 1 Container: TOEFL Listening Simulator (Part A & Part C) -->
+          <div id="fluency-listening-pane"></div>
+
+          <!-- Part 2 Container: Active Shadowing & Speaking Fluency Coach -->
+          <div id="fluency-shadowing-pane" style="display: none;"></div>
+        </div>
+      </section>
+
+      <!-- ==================================================================
+           TAB 5: REVIEW (SMART ERROR LOG & SPACED REPETITION WEAKNESS LAB)
+           ================================================================== -->
+      <section id="view-review" class="tab-view" aria-label="Smart Error Log and Spaced Repetition">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="section-eyebrow">Smart Error Log (`localStorage.error_log`) &amp; Spaced Repetition</span>
+              <h1 class="card-title">Weakness Analytics &amp; AWL Flashcard Deck</h1>
+              <p class="card-subtitle">
+                Every missed question is automatically saved to <code>error_log</code> in localStorage, grouped by Grammar Skill / Question Type with live accuracy tracking.
+              </p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span class="raw-pill" id="review-deck-stats">0 Weaknesses</span>
+              <button type="button" class="btn btn-primary btn-sm" id="btn-retry-all-weak">
+                ⚡ Retry All Weak Questions
+              </button>
+            </div>
+          </div>
+
+          <!-- Subtab Switcher inside Review: Weakness Log vs. Saved AWL Flashcard Deck -->
+          <div class="subtab-switcher" role="tablist">
+            <button type="button" class="subtab-btn active" data-review-mode="errors">
+              🚨 Weakness Log by Skill (<span id="tab-error-count">0</span>)
+            </button>
+            <button type="button" class="subtab-btn" data-review-mode="retry">
+              🎯 Interactive Retry Arena
+            </button>
+            <button type="button" class="subtab-btn" data-review-mode="flashcards">
+              🗂️ Saved AWL Vocab Deck (<span id="tab-vocab-count">0</span>)
+            </button>
+          </div>
+
+          <!-- Pane 1: Grouped Error Log by Grammar Skill / Question Type -->
+          <div id="review-errors-pane"></div>
+
+          <!-- Pane 2: Interactive Retry Weak Questions Arena -->
+          <div id="review-retry-pane" style="display: none;"></div>
+
+          <!-- Pane 3: Saved AWL Vocabulary Spaced Repetition Flashcard Deck -->
+          <div id="review-flashcards-pane" style="display: none;"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ====================================================================
+         STICKY BOTTOM NAVIGATION BAR (Mobile < 768px)
+         5 Tabs: [Home, Drills, Simulasi, Fluency, Review]
+         ==================================================================== -->
+    <nav class="mobile-bottom-nav" role="navigation" aria-label="Mobile Bottom Navigation">
+      <button type="button" class="bottom-nav-btn active" data-nav-tab="home">
+        <span class="bottom-nav-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>Home</span>
+      </button>
+
+      <button type="button" class="bottom-nav-btn" data-nav-tab="drills">
+        <span class="bottom-nav-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span>Drills</span>
+      </button>
+
+      <button type="button" class="bottom-nav-btn" data-nav-tab="simulasi">
+        <span class="bottom-nav-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Simulasi</span>
+      </button>
+
+      <button type="button" class="bottom-nav-btn" data-nav-tab="fluency">
+        <span class="bottom-nav-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        <span>Fluency</span>
+      </button>
+
+      <button type="button" class="bottom-nav-btn" data-nav-tab="review">
+        <span class="bottom-nav-indicator"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span>Review</span>
+      </button>
+    </nav>
+
+    <!-- ====================================================================
+         SETTINGS MODAL (Top Right Gear Icon -> Gemini API Key & Difficulty)
+         ==================================================================== -->
+    <div class="modal-backdrop" id="ai-settings-modal" role="dialog" aria-modal="true" aria-labelledby="ai-modal-title">
+      <div class="modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px;">
+          <div>
+            <span class="section-eyebrow">Google Gemini 2.5 Flash Integration</span>
+            <h2 class="card-title" id="ai-modal-title">AI Infinite Question Generator Settings</h2>
+            <p class="card-subtitle">
+              Your API key is stored locally in your browser’s <code>localStorage</code> under <code>gemini_api_key</code>.
+            </p>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" id="btn-close-settings-modal" aria-label="Close Settings Modal">✕</button>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label class="modal-field-label" for="input-gemini-api-key">
+            🔑 Google Gemini API Key (<code>localStorage.gemini_api_key</code>)
+          </label>
+          <input
+            type="password"
+            id="input-gemini-api-key"
+            class="modal-input"
+            placeholder="AIzaSy... (Paste your Gemini API Key)"
+            autocomplete="off"
+          />
+          <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 5px;">
+            Calls <code>https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent</code> directly from your browser.
+          </div>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <span class="modal-field-label">🎯 Target Difficulty Focus</span>
+          <div class="difficulty-option-grid" id="difficulty-focus-options">
+            <label class="difficulty-radio-card" data-diff-card="Bridge 500 to 550">
+              <input type="radio" name="ai_difficulty_focus" value="Bridge 500 to 550" style="margin-top: 3px;" />
+              <div>
+                <div style="font-weight: 800; font-size: 0.9rem; color: var(--text-navy);">
+                  Bridge 500 to 550
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">
+                  Core S-V agreement, basic parallel structures, clear context vocabulary, and campus dialogues.
+                </div>
+              </div>
+            </label>
+
+            <label class="difficulty-radio-card selected" data-diff-card="Mastery 550 to 600+ (Hard Traps)">
+              <input type="radio" name="ai_difficulty_focus" value="Mastery 550 to 600+ (Hard Traps)" checked style="margin-top: 3px;" />
+              <div>
+                <div style="font-weight: 800; font-size: 0.9rem; color: var(--text-navy);">
+                  Mastery 550 to 600+ (Hard Traps)
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-secondary);">
+                  Negative/conditional inversions, reduced relative clauses, mandatory subjunctive, illogical comparisons &amp; C1 academic inference traps.
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div style="padding: 12px 14px; border-radius: var(--radius-md); background: var(--bg-slate); border: 1px solid var(--border-subtle); margin-bottom: 18px; font-size: 0.8rem;">
+          <div style="font-weight: 800; color: var(--text-navy); margin-bottom: 4px;">
+            🧠 Active Weaknesses Targeted from <code>error_log</code>:
+          </div>
+          <div id="modal-weak-skills-preview" style="color: var(--accent-blue); font-weight: 700;">
+            Inversion, Reduced Clauses, Subject-Verb Agreement, Parallelism
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-outline" id="btn-clear-api-key">Clear Key</button>
+          <button type="button" class="btn btn-primary" id="btn-save-ai-settings">💾 Save AI Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="toast-notification" role="status" aria-live="polite"></div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

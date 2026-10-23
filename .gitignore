@@ -1,0 +1,15 @@
+# System & OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dependencies & Build
+node_modules/
+dist/
+.vercel/
+.netlify/
+
+# Local Environment & Logs
+*.log
+.env
+.env.local

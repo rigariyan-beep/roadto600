@@ -1,0 +1,21 @@
+{
+  "name": "roadto600-toefl-pwa",
+  "version": "1.0.0",
+  "description": "RoadTo600: TOEFL ITP & Fluency Mastery Progressive Web App (497 to 600+)",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -s . -l 3000",
+    "dev": "npx serve . -l 3000",
+    "deploy:vercel": "npx vercel --prod",
+    "deploy:surge": "npx surge . roadto600-toefl.surge.sh"
+  },
+  "keywords": [
+    "toefl",
+    "pwa",
+    "toefl-itp",
+    "study-app",
+    "fluency"
+  ],
+  "author": "bajrayuda",
+  "license": "MIT"
+}
