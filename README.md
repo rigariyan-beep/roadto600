@@ -78,13 +78,13 @@ Repositori ini telah dilengkapi workflow GitHub Actions di `.github/workflows/de
 1. Buat repository baru di [GitHub](https://github.com/new) bernama `roadto600`.
 2. Hubungkan remote repository dan push branch `main`:
    ```bash
-   git remote add origin https://github.com/bajrayuda/roadto600.git
+   git remote add origin https://github.com/rigariyan-beep/roadto600.git
    git push -u origin main
    ```
 3. Di tab **Settings &rarr; Pages** pada repositori GitHub Anda:
    - Di bagian **Build and deployment &rarr; Source**, pilih **GitHub Actions**.
 4. Aplikasi akan otomatis live di:
-   `https://bajrayuda.github.io/roadto600/`
+   `https://rigariyan-beep.github.io/roadto600/`
 
 ---
 
