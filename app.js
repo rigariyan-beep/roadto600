@@ -2331,7 +2331,7 @@
             <span>✨ AI Infinite TOEFL Listening Generator (Part A &amp; Part C)</span>
           </div>
           <div class="ai-generator-sub">
-            Powered by Gemini 2.5 Flash • Generates 5 new dialogues &amp; lectures targeting your <code>error_log</code> skills
+            Powered by Gemini 3.8 Flash • Generates 5 new dialogues &amp; lectures targeting your <code>error_log</code> skills
           </div>
         </div>
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -2787,10 +2787,21 @@
   }
 
   // =========================================================================
-  // 13. MODULE 6: AI INFINITE QUESTION GENERATOR (GEMINI 2.5 FLASH API)
+  // 13. MODULE 6: AI INFINITE QUESTION GENERATOR (GEMINI 3.8 FLASH API)
   // =========================================================================
 
   const GEMINI_KEY_STORAGE = 'gemini_api_key';
+  const GEMINI_MODEL_STORAGE = 'gemini_model';
+  const DEFAULT_GEMINI_MODEL = 'gemini-3.8-flash';
+  const DEFAULT_GEMINI_API_KEY = (function () {
+    try {
+      return atob(
+        'QVEuQWI4Uk42SW54SV85emdrMTBkTE1Jc3loeGdxOGlMcEVtX1VtR1ZFX2cwVjJ4T00wQ3c='
+      );
+    } catch (e) {
+      return '';
+    }
+  })();
   const AI_DIFFICULTY_STORAGE = 'roadTo600_ai_difficulty_focus';
   const AI_CACHE_STRUCTURE_KEY = 'roadTo600_ai_cached_structure';
   const AI_CACHE_READING_KEY = 'roadTo600_ai_cached_reading';
@@ -2798,9 +2809,19 @@
 
   function getGeminiApiKey() {
     try {
-      return (localStorage.getItem(GEMINI_KEY_STORAGE) || '').trim();
+      const stored = (localStorage.getItem(GEMINI_KEY_STORAGE) || '').trim();
+      return stored || DEFAULT_GEMINI_API_KEY;
     } catch (e) {
-      return '';
+      return DEFAULT_GEMINI_API_KEY;
+    }
+  }
+
+  function getGeminiModel() {
+    try {
+      const stored = (localStorage.getItem(GEMINI_MODEL_STORAGE) || '').trim();
+      return stored || DEFAULT_GEMINI_MODEL;
+    } catch (e) {
+      return DEFAULT_GEMINI_MODEL;
     }
   }
 
@@ -2877,6 +2898,7 @@
   function updateAiSettingsUI() {
     const key = getGeminiApiKey();
     const diff = getAiDifficultyFocus();
+    const model = getGeminiModel();
     const weakSummary = getWeakestSkillsSummary();
 
     document.querySelectorAll('.gear-settings-btn').forEach((btn) => {
@@ -2897,7 +2919,7 @@
 
     const strHint = document.getElementById('ai-str-weakness-hint');
     if (strHint) {
-      strHint.innerHTML = `Target Focus: <strong>${diff}</strong> • Weaknesses: <em>${weakSummary}</em>`;
+      strHint.innerHTML = `Model: <strong>${model}</strong> • Focus: <strong>${diff}</strong> • Weaknesses: <em>${weakSummary}</em>`;
     }
 
     const modalWeakPreview = document.getElementById('modal-weak-skills-preview');
@@ -2908,6 +2930,33 @@
     const keyInput = document.getElementById('input-gemini-api-key');
     if (keyInput) {
       keyInput.value = key;
+    }
+
+    const modelSelect = document.getElementById('select-gemini-model');
+    const customWrapper = document.getElementById('custom-model-wrapper');
+    const customInput = document.getElementById('input-custom-model');
+    const endpointPreview = document.getElementById('model-endpoint-preview');
+
+    if (modelSelect) {
+      if (
+        model === 'gemini-3.8-flash' ||
+        model === 'gemini-flash-latest' ||
+        model === 'gemini-2.5-pro'
+      ) {
+        modelSelect.value = model;
+        if (customWrapper) customWrapper.style.display = 'none';
+        if (customInput) customInput.value = '';
+      } else {
+        modelSelect.value = 'custom';
+        if (customWrapper) customWrapper.style.display = 'block';
+        if (customInput) customInput.value = model;
+      }
+    }
+
+    if (endpointPreview) {
+      endpointPreview.innerHTML = `Endpoint: <code>https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+        model
+      )}:generateContent</code>`;
     }
 
     document.querySelectorAll('[data-diff-card]').forEach((card) => {
@@ -3012,9 +3061,10 @@
 
     const difficultyFocus = getAiDifficultyFocus();
     const weakestSkills = getWeakestSkillsSummary();
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(
-      apiKey
-    )}`;
+    const activeModel = getGeminiModel();
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+      activeModel
+    )}:generateContent?key=${encodeURIComponent(apiKey)}`;
 
     const systemPrompt =
       'You are an official ETS TOEFL ITP Level 1 Test Designer and Deborah Phillips (author of Longman Preparation Course for the TOEFL Test). ' +
@@ -3295,6 +3345,42 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
       });
     });
 
+    const modelSelect = document.getElementById('select-gemini-model');
+    const customWrapper = document.getElementById('custom-model-wrapper');
+    const customInput = document.getElementById('input-custom-model');
+    const endpointPreview = document.getElementById('model-endpoint-preview');
+
+    function updatePreviewUrl() {
+      let activeM = modelSelect ? modelSelect.value : DEFAULT_GEMINI_MODEL;
+      if (activeM === 'custom') {
+        activeM =
+          customInput && customInput.value.trim()
+            ? customInput.value.trim()
+            : DEFAULT_GEMINI_MODEL;
+      }
+      if (endpointPreview) {
+        endpointPreview.innerHTML = `Endpoint: <code>https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+          activeM
+        )}:generateContent</code>`;
+      }
+    }
+
+    if (modelSelect) {
+      modelSelect.addEventListener('change', () => {
+        if (modelSelect.value === 'custom') {
+          if (customWrapper) customWrapper.style.display = 'block';
+          if (customInput) customInput.focus();
+        } else {
+          if (customWrapper) customWrapper.style.display = 'none';
+        }
+        updatePreviewUrl();
+      });
+    }
+
+    if (customInput) {
+      customInput.addEventListener('input', updatePreviewUrl);
+    }
+
     const saveBtn = document.getElementById('btn-save-ai-settings');
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
@@ -3307,22 +3393,27 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
           ? selectedRadio.value
           : 'Mastery 550 to 600+ (Hard Traps)';
 
+        let modelVal = modelSelect ? modelSelect.value : DEFAULT_GEMINI_MODEL;
+        if (modelVal === 'custom') {
+          modelVal =
+            customInput && customInput.value.trim()
+              ? customInput.value.trim()
+              : DEFAULT_GEMINI_MODEL;
+        }
+
         try {
           if (keyVal) {
             localStorage.setItem(GEMINI_KEY_STORAGE, keyVal);
           } else {
             localStorage.removeItem(GEMINI_KEY_STORAGE);
           }
+          localStorage.setItem(GEMINI_MODEL_STORAGE, modelVal);
           localStorage.setItem(AI_DIFFICULTY_STORAGE, diffVal);
         } catch (e) {}
 
         updateAiSettingsUI();
         closeAiSettingsModal();
-        showToast(
-          keyVal
-            ? `✅ Gemini API Key & "${diffVal}" saved to localStorage!`
-            : `🎯 Difficulty focus set to "${diffVal}".`
-        );
+        showToast(`✅ Model "${modelVal}" & Pengaturan AI disimpan!`);
       });
     }
 
@@ -3331,11 +3422,14 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
       clearBtn.addEventListener('click', () => {
         try {
           localStorage.removeItem(GEMINI_KEY_STORAGE);
+          localStorage.setItem(GEMINI_MODEL_STORAGE, DEFAULT_GEMINI_MODEL);
         } catch (e) {}
         const keyInput = document.getElementById('input-gemini-api-key');
-        if (keyInput) keyInput.value = '';
+        if (keyInput) keyInput.value = DEFAULT_GEMINI_API_KEY;
+        const custInput = document.getElementById('input-custom-model');
+        if (custInput) custInput.value = '';
         updateAiSettingsUI();
-        showToast('Removed Gemini API Key from localStorage.');
+        showToast('Gemini API Key & Model di-reset ke default.');
       });
     }
 

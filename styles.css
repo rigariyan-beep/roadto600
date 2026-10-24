@@ -1808,7 +1808,7 @@ html, body {
 }
 
 /* ==========================================================================
-   AI INFINITE QUESTION GENERATOR & SETTINGS MODAL (GEMINI 2.5 FLASH)
+   AI INFINITE QUESTION GENERATOR & SETTINGS MODAL (GEMINI 3.8 FLASH)
    ========================================================================== */
 
 .desktop-top-utility-bar {
@@ -1975,7 +1975,8 @@ html, body {
   margin-bottom: 6px;
 }
 
-.modal-input {
+.modal-input,
+.modal-select {
   width: 100%;
   padding: 11px 14px;
   border-radius: var(--radius-md);
@@ -1989,7 +1990,13 @@ html, body {
   transition: border-color 0.15s ease;
 }
 
-.modal-input:focus {
+.modal-select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.modal-input:focus,
+.modal-select:focus {
   border-color: var(--accent-blue);
   background: var(--card-white);
 }

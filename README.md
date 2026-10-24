@@ -34,7 +34,7 @@
 6. **Review Deck (Spaced Repetition & Error Notebook)**
    - Otomatis mencatat setiap soal yang salah ke dalam daftar review terfokus untuk eliminasi kelemahan berulang.
 
-7. **AI Infinite Question Generator (Google Gemini 2.5 Flash)**
+7. **AI Infinite Question Generator (Google Gemini 3.8 Flash)**
    - Integrasi opsional API key pengguna untuk menghasilkan variasi soal baru tanpa batas sesuai target level kesulitan.
 
 ---
