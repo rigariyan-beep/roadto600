@@ -7,11 +7,12 @@ echo ======================================================================
 echo.
 cd /d "d:\antigravity"
 git push -u origin main --force
+git push origin main:gh-pages --force
 echo.
 if %errorlevel% equ 0 (
     color 0a
     echo ======================================================================
-    echo    BERHASIL! Aplikasi RoadTo600 sudah terunggah ke GitHub!
+    echo    BERHASIL! Aplikasi RoadTo600 sudah terunggah ke main & gh-pages!
     echo ======================================================================
 ) else (
     color 0c

@@ -2819,7 +2819,18 @@
   function getGeminiModel() {
     try {
       const stored = (localStorage.getItem(GEMINI_MODEL_STORAGE) || '').trim();
-      return stored || DEFAULT_GEMINI_MODEL;
+      if (
+        !stored ||
+        stored === 'gemini-2.5-flash' ||
+        stored === 'gemini-2.0-flash' ||
+        stored === 'gemini-1.5-flash'
+      ) {
+        if (stored) {
+          localStorage.setItem(GEMINI_MODEL_STORAGE, DEFAULT_GEMINI_MODEL);
+        }
+        return DEFAULT_GEMINI_MODEL;
+      }
+      return stored;
     } catch (e) {
       return DEFAULT_GEMINI_MODEL;
     }
@@ -3157,25 +3168,44 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
     }
 
     try {
-      const response = await fetch(endpoint, {
+      const requestPayload = {
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        contents: [
+          {
+            role: 'user',
+            parts: [{ text: userPrompt }]
+          }
+        ],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.7
+        }
+      };
+
+      let response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: systemPrompt }]
-          },
-          contents: [
-            {
-              role: 'user',
-              parts: [{ text: userPrompt }]
-            }
-          ],
-          generationConfig: {
-            responseMimeType: 'application/json',
-            temperature: 0.7
-          }
-        })
+        body: JSON.stringify(requestPayload)
       });
+
+      // If the primary model fails (e.g. 503 high demand or 404), seamlessly fallback to gemini-flash-latest
+      if (!response.ok && activeModel !== 'gemini-flash-latest') {
+        try {
+          const fallbackEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${encodeURIComponent(
+            apiKey
+          )}`;
+          const fallbackRes = await fetch(fallbackEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestPayload)
+          });
+          if (fallbackRes.ok) {
+            response = fallbackRes;
+          }
+        } catch (e) {}
+      }
 
       if (!response.ok) {
         let errDetail = `HTTP ${response.status}`;
@@ -3455,7 +3485,12 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
         location.hostname === 'localhost' ||
         location.hostname === '127.0.0.1')
     ) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
+      navigator.serviceWorker
+        .register('./sw.js')
+        .then((reg) => {
+          reg.update().catch(() => {});
+        })
+        .catch(() => {});
     }
   }
 

@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
+      - gh-pages
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -16,7 +17,22 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  sync-branches:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push main to gh-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git push origin main:gh-pages --force
+
   deploy:
+    if: github.ref == 'refs/heads/gh-pages'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
