@@ -3463,6 +3463,30 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
       });
     }
 
+    const purgeBtn = document.getElementById('btn-purge-cache');
+    if (purgeBtn) {
+      purgeBtn.addEventListener('click', () => {
+        if ('caches' in window) {
+          caches.keys().then((names) => {
+            for (let name of names) caches.delete(name);
+          });
+        }
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then((registrations) => {
+            for (let reg of registrations) reg.unregister();
+          });
+        }
+        try {
+          localStorage.removeItem(GEMINI_MODEL_STORAGE);
+          localStorage.removeItem('roadto600_version');
+        } catch (e) {}
+        showToast('🧹 Cache dibersihkan! Memuat ulang aplikasi...');
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 500);
+      });
+    }
+
     const genStrBtn = document.getElementById('btn-generate-structure-drill');
     if (genStrBtn) {
       genStrBtn.addEventListener('click', () => generateAiDailyDrill('structure'));

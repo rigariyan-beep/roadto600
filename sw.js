@@ -1,10 +1,11 @@
-const CACHE_NAME = 'roadto600-pwa-v3';
+const CACHE_NAME = 'roadto600-pwa-v382';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './data.js',
   './app.js',
+  './app-v38.js',
   './manifest.json',
   './icons/icon.svg'
 ];

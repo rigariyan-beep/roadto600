@@ -10,6 +10,36 @@
   <meta name="apple-mobile-web-app-title" content="RoadTo600" />
   <title>RoadTo600: TOEFL ITP &amp; Fluency Mastery</title>
 
+  <!-- Self-Healing Cache Purger: Guarantees legacy app.js is never used -->
+  <script>
+    (function () {
+      const CURRENT_VERSION = 'v3.8.2';
+      const storedVersion = localStorage.getItem('roadto600_version');
+
+      // Purge old stored model if it was legacy 2.5
+      try {
+        const m = localStorage.getItem('gemini_model');
+        if (m && (m.includes('2.5-flash') || m.includes('2.0-flash') || m.includes('1.5-flash'))) {
+          localStorage.setItem('gemini_model', 'gemini-3.8-flash');
+        }
+      } catch (e) {}
+
+      if (storedVersion !== CURRENT_VERSION) {
+        if ('caches' in window) {
+          caches.keys().then(function (names) {
+            for (let name of names) caches.delete(name);
+          });
+        }
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let reg of registrations) reg.unregister();
+          });
+        }
+        localStorage.setItem('roadto600_version', CURRENT_VERSION);
+      }
+    })();
+  </script>
+
   <!-- Google Fonts: Plus Jakarta Sans & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -734,9 +764,14 @@
           </div>
         </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-          <button type="button" class="btn btn-outline" id="btn-clear-api-key">Clear Key</button>
-          <button type="button" class="btn btn-primary" id="btn-save-ai-settings">💾 Save AI Settings</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline btn-sm" id="btn-purge-cache" style="color: #ef4444; border-color: #ef4444;">
+            🧹 Reset &amp; Bersihkan Cache
+          </button>
+          <div style="display: flex; gap: 10px;">
+            <button type="button" class="btn btn-outline" id="btn-clear-api-key">Reset Key</button>
+            <button type="button" class="btn btn-primary" id="btn-save-ai-settings">💾 Save AI Settings</button>
+          </div>
         </div>
       </div>
     </div>
@@ -747,7 +782,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="./data.js?v=3.8.1"></script>
-  <script src="./app.js?v=3.8.1"></script>
+  <script src="./data.js?v=3.8.2"></script>
+  <script src="./app-v38.js?v=3.8.2"></script>
 </body>
 </html>
