@@ -3072,10 +3072,14 @@
 
     const difficultyFocus = getAiDifficultyFocus();
     const weakestSkills = getWeakestSkillsSummary();
-    const activeModel = getGeminiModel();
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
-      activeModel
-    )}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const activeModel = getGeminiModel() || DEFAULT_GEMINI_MODEL;
+    const modelPool = [
+      activeModel,
+      'gemini-3.5-flash',
+      'gemini-3.6-flash',
+      'gemini-3.1-flash-lite',
+      'gemini-flash-latest'
+    ].filter((m, idx, arr) => m && arr.indexOf(m) === idx);
 
     const systemPrompt =
       'You are an official ETS TOEFL ITP Level 1 Test Designer and Deborah Phillips (author of Longman Preparation Course for the TOEFL Test). ' +
@@ -3184,38 +3188,49 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
         }
       };
 
-      let response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestPayload)
-      });
+      let response = null;
+      let lastErrDetail = '';
+      let usedModel = activeModel;
 
-      // If the primary model fails (e.g. 503 high demand or 404), seamlessly fallback to gemini-flash-latest
-      if (!response.ok && activeModel !== 'gemini-flash-latest') {
+      for (const modelToTry of modelPool) {
         try {
-          const fallbackEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${encodeURIComponent(
-            apiKey
-          )}`;
-          const fallbackRes = await fetch(fallbackEndpoint, {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+            modelToTry
+          )}:generateContent?key=${encodeURIComponent(apiKey)}`;
+
+          const res = await fetch(endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(requestPayload)
           });
-          if (fallbackRes.ok) {
-            response = fallbackRes;
+
+          if (res.ok) {
+            response = res;
+            usedModel = modelToTry;
+            break;
           }
-        } catch (e) {}
+
+          let errJson = null;
+          try {
+            errJson = await res.json();
+          } catch (e) {}
+
+          lastErrDetail =
+            (errJson && errJson.error && errJson.error.message) ||
+            `HTTP ${res.status}`;
+          console.warn(
+            `[RoadTo600 AI] Model ${modelToTry} returned ${res.status}: ${lastErrDetail}. Retrying next model in pool...`
+          );
+        } catch (netErr) {
+          lastErrDetail = netErr.message;
+        }
       }
 
-      if (!response.ok) {
-        let errDetail = `HTTP ${response.status}`;
-        try {
-          const errJson = await response.json();
-          if (errJson && errJson.error && errJson.error.message) {
-            errDetail = errJson.error.message;
-          }
-        } catch (e) {}
-        throw new Error(errDetail);
+      if (!response || !response.ok) {
+        throw new Error(
+          lastErrDetail ||
+            'Gagal menghubungi Gemini API pada semua model yang tersedia.'
+        );
       }
 
       const data = await response.json();
