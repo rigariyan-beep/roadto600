@@ -295,6 +295,8 @@
     });
     if (tabName === 'review') {
       renderReviewTab();
+    } else if (tabName === 'materi') {
+      renderMateriTab();
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -3083,7 +3085,9 @@
 
     const systemPrompt =
       'You are an official ETS TOEFL ITP Level 1 Test Designer and Deborah Phillips (author of Longman Preparation Course for the TOEFL Test). ' +
-      'You design rigorous, authentic academic American English questions calibrated for a learner progressing from 497 to 600+. ' +
+      'You design rigorous, authentic academic American English questions calibrated for an Indonesian learner progressing from 497 to 600+. ' +
+      'MANDATORY LANGUAGE RULE: All "explanation", "structuralAnalysis" (mainSubject, mainVerb, optionBreakdown), "idiomSpotlight", "toneNotes", and vocabulary "meaning" MUST be written completely and clearly in educational BAHASA INDONESIA. ' +
+      'The English question sentences, reading passages, dialogue lines, quotes, and option choices themselves MUST remain in authentic TOEFL American English. ' +
       'Always respond ONLY with valid, parseable JSON matching the requested schema with zero markdown wrappers or extra commentary.';
 
     let userPrompt = '';
@@ -3093,6 +3097,12 @@ Difficulty Focus: "${difficultyFocus}".
 Tailor the 5 questions specifically to the user's weakest skills from error_log: "${weakestSkills}" (e.g., Inversion with Negative Expressions, Conditional Inversion, Reduced Adjective Clauses, Subjunctive Mood, Parallel Structure with Comparisons/Paired Conjunctions, Subject-Verb Agreement after Prepositional Phrases).
 Include a mix of "Structure Part A" (sentence completion with _______) and "Structure Part B (Error Recognition)" (where the question sentence contains [A] word/phrase, [B] word/phrase, [C] word/phrase, [D] word/phrase and the options array matches ["[A] ...", "[B] ...", "[C] ...", "[D] ..."]).
 
+LANGUAGE REQUIREMENT: All explanations and analyses MUST be in BAHASA INDONESIA.
+- "explanation": Penjelasan kaidah tata bahasa lengkap dalam Bahasa Indonesia mengapa jawaban ini benar.
+- "mainSubject": Subjek utama dalam Bahasa Indonesia.
+- "mainVerb": Kata kerja utama dalam Bahasa Indonesia.
+- "optionBreakdown": Penjelasan untuk tiap opsi A, B, C, D dalam Bahasa Indonesia mengapa salah atau benar.
+
 Return ONLY a valid JSON array of 5 objects with this exact structure:
 [
   {
@@ -3101,21 +3111,25 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
     "question": "Full sentence question...",
     "options": ["Option A", "Option B", "Option C", "Option D"],
     "correctIndex": 0,
-    "explanation": "Clear grammatical rule explanation...",
+    "explanation": "Penjelasan tata bahasa dalam Bahasa Indonesia...",
     "structuralAnalysis": {
-      "mainSubject": "Explicit main subject of the sentence",
-      "mainVerb": "Explicit main verb of the sentence",
+      "mainSubject": "Subjek utama (Bahasa Indonesia)",
+      "mainVerb": "Kata kerja utama (Bahasa Indonesia)",
       "optionBreakdown": [
-        "A: Why right or wrong",
-        "B: Why right or wrong",
-        "C: Why right or wrong",
-        "D: Why right or wrong"
+        "A: Alasan benar/salah dalam Bahasa Indonesia",
+        "B: Alasan benar/salah dalam Bahasa Indonesia",
+        "C: Alasan benar/salah dalam Bahasa Indonesia",
+        "D: Alasan benar/salah dalam Bahasa Indonesia"
       ]
     }
   }
 ]`;
     } else if (targetModule === 'reading') {
       userPrompt = `Generate a strict JSON object representing a new TOEFL ITP Section 3 Academic Reading Passage with 14 to 16 lines, 5 Academic Word List (AWL) vocabulary items appearing in the text, and 5 comprehension questions tailored to "${difficultyFocus}" and weaknesses "${weakestSkills}" (Academic Inference, Vocabulary in Context, Factual Detail, Negative Factual Detail EXCEPT, Rhetorical Purpose).
+
+LANGUAGE REQUIREMENT: All question explanations and AWL vocabulary meanings MUST be in BAHASA INDONESIA.
+- "meaning": Definisi kosakata akademis dalam Bahasa Indonesia.
+- "explanation": Penjelasan detail dalam Bahasa Indonesia mengapa opsi ini didukung teks atau baris tertentu.
 
 Return ONLY a valid JSON object with this exact structure:
 {
@@ -3132,7 +3146,7 @@ Return ONLY a valid JSON object with this exact structure:
       "phonetic": "/IPA/",
       "lineRef": "Line X",
       "toeflSynonym": "synonym 1 / synonym 2",
-      "meaning": "Academic definition",
+      "meaning": "Definisi dalam Bahasa Indonesia",
       "contextQuote": "Quote from passage"
     }
   ],
@@ -3142,12 +3156,17 @@ Return ONLY a valid JSON object with this exact structure:
       "question": "Question text...",
       "options": ["Option A", "Option B", "Option C", "Option D"],
       "correctIndex": 0,
-      "explanation": "Detailed explanation of why the answer is supported by the text."
+      "explanation": "Penjelasan detail dalam Bahasa Indonesia mengapa opsi ini benar."
     }
   ]
 }`;
     } else {
       userPrompt = `Generate a strict JSON array of 5 new TOEFL ITP Section 1 Listening Comprehension items (mix of "Part A • Short Dialogue" and "Part C • Academic Lecture") tailored to "${difficultyFocus}" and weaknesses "${weakestSkills}" (Idiomatic Expressions, Implied Meaning, Second-Order Conditionals, Academic Tone).
+
+LANGUAGE REQUIREMENT: All "explanation", "idiomSpotlight", and "toneNotes" MUST be in BAHASA INDONESIA.
+- "idiomSpotlight": Uraian idiom/ungkapan dalam Bahasa Indonesia beserta arti dan cara pemakaiannya.
+- "toneNotes": Catatan intonasi dan sikap penutur dalam Bahasa Indonesia.
+- "explanation": Penjelasan detail dalam Bahasa Indonesia mengapa opsi ini cocok dengan maksud implisit pembicara.
 
 Return ONLY a valid JSON array of 5 objects with this exact structure:
 [
@@ -3164,9 +3183,9 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
     "options": ["Option A", "Option B", "Option C", "Option D"],
     "correctIndex": 0,
     "skill": "Listening Skill: Specific Skill Name",
-    "idiomSpotlight": "Explanation of the key idiom or academic discourse marker used",
-    "toneNotes": "Intonation and speaker attitude notes",
-    "explanation": "Why the correct option matches the speaker's implied meaning."
+    "idiomSpotlight": "Penjelasan idiom dalam Bahasa Indonesia...",
+    "toneNotes": "Catatan intonasi dan sikap dalam Bahasa Indonesia...",
+    "explanation": "Penjelasan mengapa opsi ini tepat dalam Bahasa Indonesia..."
   }
 ]`;
     }
@@ -3514,6 +3533,199 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
   }
 
   // =========================================================================
+  // 13.5. MATERI & TIPS TRIK MODULE (ROAD TO 600+ STUDY GUIDE)
+  // =========================================================================
+
+  let activeMateriCategory = 'blueprint';
+  let materiSearchQuery = '';
+
+  function escapeHtml(str) {
+    return String(str || '').replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[m]);
+  }
+
+  function renderMateriTab() {
+    const container = document.getElementById('materi-content-area');
+    if (!container || typeof TOEFL_MATERI_DATA === 'undefined') return;
+
+    // Update active state on category pill buttons
+    document.querySelectorAll('[data-materi-tab]').forEach((btn) => {
+      btn.classList.toggle(
+        'active',
+        btn.getAttribute('data-materi-tab') === activeMateriCategory && !materiSearchQuery
+      );
+    });
+
+    const categoryData = TOEFL_MATERI_DATA[activeMateriCategory];
+    if (!categoryData) return;
+
+    const q = materiSearchQuery.trim().toLowerCase();
+
+    // Live search across all TOEFL materi modules
+    if (q) {
+      const allMatches = [];
+      Object.keys(TOEFL_MATERI_DATA).forEach((catKey) => {
+        const cat = TOEFL_MATERI_DATA[catKey];
+        (cat.modules || []).forEach((mod) => {
+          const hay = (
+            mod.title +
+            ' ' +
+            (mod.badge || '') +
+            ' ' +
+            mod.content
+          ).toLowerCase();
+          if (hay.includes(q)) {
+            allMatches.push({
+              ...mod,
+              categoryTitle: cat.title
+            });
+          }
+        });
+      });
+
+      if (allMatches.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 48px 16px; color: var(--text-muted);">
+            <div style="font-size: 2.2rem; margin-bottom: 12px;">🔍</div>
+            <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-navy); margin-bottom: 6px;">
+              Tidak Ditemukan Materi untuk "${escapeHtml(materiSearchQuery)}"
+            </div>
+            <p style="font-size: 0.88rem; max-width: 440px; margin: 0 auto;">
+              Coba gunakan istilah lain seperti <em>inversi</em>, <em>reduced clause</em>, <em>paralel</em>, <em>skimming</em>, atau <em>idiom</em>.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div style="margin-bottom: 16px; font-size: 0.88rem; font-weight: 700; color: var(--accent-blue);">
+          🎯 Ditemukan ${allMatches.length} materi / kaidah untuk kata kunci "${escapeHtml(materiSearchQuery)}":
+        </div>
+        <div class="materi-accordion-list">
+          ${allMatches
+            .map(
+              (mod, idx) => `
+            <div class="materi-accordion-card open" data-accordion-index="${idx}">
+              <div class="materi-accordion-header">
+                <div class="materi-accordion-title-wrap">
+                  <span class="materi-accordion-badge">${mod.categoryTitle || mod.badge || 'Kaidah Emas'}</span>
+                  <h3 class="materi-accordion-title">${mod.title}</h3>
+                </div>
+                <span class="materi-accordion-arrow">▼</span>
+              </div>
+              <div class="materi-accordion-content">
+                ${mod.content}
+              </div>
+            </div>
+          `
+            )
+            .join('')}
+        </div>
+      `;
+      return;
+    }
+
+    // Default category view
+    const modulesToRender = categoryData.modules || [];
+
+    container.innerHTML = `
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-navy); margin-bottom: 4px;">
+          ${categoryData.title}
+        </h2>
+        <p style="font-size: 0.88rem; color: var(--text-secondary);">
+          ${categoryData.subtitle}
+        </p>
+      </div>
+
+      <div class="materi-accordion-list">
+        ${modulesToRender
+          .map(
+            (mod, idx) => `
+          <div class="materi-accordion-card ${idx === 0 ? 'open' : ''}" data-accordion-index="${idx}">
+            <div class="materi-accordion-header">
+              <div class="materi-accordion-title-wrap">
+                <span class="materi-accordion-badge">${mod.badge || 'Kaidah Emas'}</span>
+                <h3 class="materi-accordion-title">${mod.title}</h3>
+              </div>
+              <span class="materi-accordion-arrow">▼</span>
+            </div>
+            <div class="materi-accordion-content">
+              ${mod.content}
+            </div>
+          </div>
+        `
+          )
+          .join('')}
+      </div>
+    `;
+  }
+
+  function initMateriModule() {
+    // 1. Category Pill Switching
+    document.querySelectorAll('[data-materi-tab]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeMateriCategory = btn.getAttribute('data-materi-tab');
+        materiSearchQuery = '';
+        const searchInput = document.getElementById('materi-search-input');
+        if (searchInput) searchInput.value = '';
+        const clearBtn = document.getElementById('materi-search-clear');
+        if (clearBtn) clearBtn.style.display = 'none';
+        renderMateriTab();
+      });
+    });
+
+    // 2. Search & Clear Input
+    const searchInput = document.getElementById('materi-search-input');
+    const clearBtn = document.getElementById('materi-search-clear');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        materiSearchQuery = e.target.value;
+        if (clearBtn) {
+          clearBtn.style.display = materiSearchQuery ? 'inline-block' : 'none';
+        }
+        renderMateriTab();
+      });
+    }
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        materiSearchQuery = '';
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+        }
+        clearBtn.style.display = 'none';
+        renderMateriTab();
+      });
+    }
+
+    // 3. Resilient Event Delegation for Accordion Toggle
+    const container = document.getElementById('materi-content-area');
+    if (container) {
+      container.addEventListener('click', (e) => {
+        const header = e.target.closest('.materi-accordion-header');
+        if (header) {
+          const card = header.closest('.materi-accordion-card');
+          if (card) {
+            card.classList.toggle('open');
+          }
+        }
+      });
+    }
+
+    // Render initially
+    renderMateriTab();
+  }
+
+  // =========================================================================
   // 14. PWA SERVICE WORKER REGISTRATION & APP BOOTSTRAP
   // =========================================================================
 
@@ -3539,6 +3751,7 @@ Return ONLY a valid JSON array of 5 objects with this exact structure:
     renderScoreTrajectoryHeader();
     initScoreCalculator();
     initHabitTracker();
+    initMateriModule();
     initDrillsModule();
     initSimulasiModule();
     initFluencyModule();

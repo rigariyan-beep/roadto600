@@ -1,4 +1,4 @@
-const CACHE_NAME = 'roadto600-pwa-v382';
+const CACHE_NAME = 'roadto600-pwa-v383';
 const ASSETS = [
   './',
   './index.html',
