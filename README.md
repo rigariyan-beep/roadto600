@@ -89,4 +89,4 @@ Repositori ini telah dilengkapi workflow GitHub Actions di `.github/workflows/de
 ---
 
 ## 📄 Lisensi
-MIT License &copy; 2026 bajrayuda
+MIT License &copy; 2026 rigariyan-beep
